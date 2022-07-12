@@ -13,5 +13,9 @@ A Tic-Tac-Toe App!
 7 | 8  |  9
 End of Task 1 goals.
 
+player clicks square -> function to check if played -> update with player if it's their turn
+
+click -> checkifturn (player) -> playPiece -> changeturn
+
 Then
 Check for winner??

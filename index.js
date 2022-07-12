@@ -36,29 +36,51 @@ const gameBoard = (() => {
             array[i] = [];
     
             for (let j = 0; j < 3; j++) {
-                array[i][j] = ".";
+                array[i][j] = null;
             };
         };
         return array;
     };
+    //create board array
+    const finishedBoard = makeGameBoard();
     
+    const playSquare = (clickedSquare, test) => {
+        if (clickedSquare.innerHTML == "") {
+            clickedSquare.innerHTML = "X";
+        }
+    };
+
     const getBoard = document.querySelectorAll('.square');
     const getEventListeners = getBoard.forEach(square => {
         square.addEventListener("click", () => {
-            console.log(square.id)
+            console.log(square.id);
+            playSquare(square);
         });
     });
+
     const add = (a, b) => a + b;
 
     return {
-        makeGameBoard,
+        finishedBoard,
         getBoard,
         getEventListeners,
         add,
+        playSquare,
     };
 })();
 
-gameBoard.getEventListeners;
+//player factory function
+const player = (name, piece) => {
+    const test = () => console.log("test");
+
+   return { name, piece, test, };
+};
+
+const playerOne = player("playerOne", "X");
+const playerTwo = player("playerTwo", "O");
+
+
+console.log(gameBoard.finishedBoard);
 
 
 
