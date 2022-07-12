@@ -27,39 +27,38 @@
 // console.log(checkForHi());
 
 
-//gameboard constructor
-const makeGameBoard = () => {
-    let array = [];
-
-    for( let i = 0; i < 3; i++) {
-        array[i] = [];
-
-        for (let j = 0; j < 3; j++) {
-            array[i][j] = ".";
+//gameBoard module
+const gameBoard = (() => {
+    const makeGameBoard = () => {
+        let array = [];
+    
+        for( let i = 0; i < 3; i++) {
+            array[i] = [];
+    
+            for (let j = 0; j < 3; j++) {
+                array[i][j] = ".";
+            };
         };
+        return array;
     };
-    return array;
-};
+    
+    const getBoard = document.querySelectorAll('.square');
+    const getEventListeners = getBoard.forEach(square => {
+        square.addEventListener("click", () => {
+            console.log(square.id)
+        });
+    });
+    const add = (a, b) => a + b;
 
-//factory function to select piece locations
-const getEventListeners = (board) => {
-    board.forEach(square => {
-        console.log(square)
-    })
-    return "done"
-}
+    return {
+        makeGameBoard,
+        getBoard,
+        getEventListeners,
+        add,
+    };
+})();
 
-const getGameBoard = () => {
-    const getBoard = () => document.querySelectorAll('square')
-    return { getBoard }
-}
-
-const gameBoard = makeGameBoard();
-const board = getGameBoard();
-
-board.getBoard();
-board.getEventListeners(board);
-// getEventListeners(gbPlayer);
+gameBoard.getEventListeners;
 
 
 
