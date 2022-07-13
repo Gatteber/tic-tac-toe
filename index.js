@@ -27,6 +27,15 @@
 // console.log(checkForHi());
 
 
+
+
+//player factory function
+const player = (name, piece) => {
+    const test = () => console.log("test");
+
+   return { name, piece, test, };
+};
+
 //gameBoard module
 const gameBoard = (() => {
     const makeGameBoard = () => {
@@ -43,44 +52,77 @@ const gameBoard = (() => {
     };
     //create board array
     const finishedBoard = makeGameBoard();
-    
-    const playSquare = (clickedSquare, test) => {
+
+    const playSquare = (clickedSquare) => {
         if (clickedSquare.innerHTML == "") {
-            clickedSquare.innerHTML = "X";
-        }
+           return clickedSquare.id
+        };
     };
 
-    const getBoard = document.querySelectorAll('.square');
-    const getEventListeners = getBoard.forEach(square => {
-        square.addEventListener("click", () => {
-            console.log(square.id);
-            playSquare(square);
-        });
-    });
+    // const getBoard = document.querySelectorAll('.square');
+    // const getEventListeners = getBoard.forEach(square => {
+    //     square.addEventListener("click", () => {
+    //         console.log(square.id);
+    //         playSquare(square);
+    //     });
+    // });
 
     const add = (a, b) => a + b;
 
     return {
         finishedBoard,
-        getBoard,
-        getEventListeners,
+        // getBoard,
+        // getEventListeners,
         add,
         playSquare,
+
     };
 })();
 
-//player factory function
-const player = (name, piece) => {
-    const test = () => console.log("test");
+//display module
+const displayUpdate = (() => {
 
-   return { name, piece, test, };
-};
+    //make players
+    const playerOne = player("playerOne", "X");
+    const playerTwo = player("playerTwo", "O");
 
-const playerOne = player("playerOne", "X");
-const playerTwo = player("playerTwo", "O");
+    //get playSquare
+    const { playSquare } = gameBoard;
+
+    const stripNumber = (squareID) => {
+        const string = JSON.stringify(squareID)
+        // console.log(string[4])
+        const row = string.slice(1, 2);
+        const column = string.slice(3, 4);
+        const final = [row, column];
+        gameBoard.finishedBoard[row][column] = "X";
+
+        return  final;
+    };
+
+    const getBoard = document.querySelectorAll('.square');
+    const getEventListeners = getBoard.forEach(square => {
+        square.addEventListener("click", () => {
+            // console.log(square.id);
+            console.log(stripNumber(square.id));
+        });
+    });
+
+    // console.log(gameBoard.finishedBoard);
+    // console.log(playerOne);
+    // console.log(playerTwo);
+    // console.log(updateBoard())
+
+    return { playSquare, }
+
+})();
 
 
-console.log(gameBoard.finishedBoard);
+
+
+
+
+
 
 
 
