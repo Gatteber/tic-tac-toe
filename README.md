@@ -25,3 +25,5 @@ Click -> 1.1
 1.1 -> strip and into a map
 map into array
 update the screen
+
+render obj, not array inside the obj is the square id

@@ -45,7 +45,10 @@ const gameBoard = (() => {
             array[i] = [];
     
             for (let j = 0; j < 3; j++) {
-                array[i][j] = null;
+                array[i][j] = {
+                    piece: null,
+                    pos: [i] + "." + [j]
+                };
             };
         };
         return array;
@@ -89,22 +92,25 @@ const displayUpdate = (() => {
     //get playSquare
     const { playSquare } = gameBoard;
 
+    //strip id from playSquare
     const stripNumber = (squareID) => {
-        const string = JSON.stringify(squareID)
-        // console.log(string[4])
+        const string = JSON.stringify(squareID);
         const row = string.slice(1, 2);
         const column = string.slice(3, 4);
-        const final = [row, column];
-        gameBoard.finishedBoard[row][column] = "X";
-
-        return  final;
+        gameBoard.finishedBoard[row][column] = playerOne.piece;
+        renderBoard(gameBoard.finishedBoard);
     };
 
+    //render array into board
+    const renderBoard = (board) => {
+        console.log(board);
+    }
+
     const getBoard = document.querySelectorAll('.square');
-    const getEventListeners = getBoard.forEach(square => {
+    getBoard.forEach(square => {
         square.addEventListener("click", () => {
             // console.log(square.id);
-            console.log(stripNumber(square.id));
+            stripNumber(square.id);
         });
     });
 
