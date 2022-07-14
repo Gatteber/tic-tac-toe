@@ -31,9 +31,16 @@
 
 //player factory function
 const player = (name, piece) => {
-    const test = () => console.log("test");
+    let isTurn = false;
 
-   return { name, piece, test, };
+    //toggle player turns
+    const myTurn = () => {
+        console.log(isTurn);
+        isTurn = !isTurn;
+        // return isTurn;
+    };
+
+   return { name, piece, myTurn, };
 };
 
 //gameBoard module
@@ -88,6 +95,25 @@ const displayUpdate = (() => {
     //make players
     const playerOne = player("playerOne", "X");
     const playerTwo = player("playerTwo", "O");
+    playerOne.isTurn = true;
+    // playerOne.myTurn(playerOne.isTurn);
+    // console.log(playerOne.isTurn);
+    // playerOne.myTurn(playerOne.isTurn);
+    // console.log(playerOne.isTurn);
+    // playerTwo.myTurn(playerTwo.isTurn);
+
+
+
+    //get piece to play
+    const getPiece = (p1Turn) => {
+        playerOne.myTurn(playerOne.isTurn);
+        console.log(playerTwo.isTurn);
+        playerTwo.myTurn(playerTwo.isTurn);
+        return p1Turn ? playerOne.piece : playerTwo.piece;
+    }
+
+
+
 
     //get playSquare
     const { playSquare } = gameBoard;
@@ -97,7 +123,7 @@ const displayUpdate = (() => {
         const string = JSON.stringify(squareID);
         const row = string.slice(1, 2);
         const column = string.slice(3, 4);
-        gameBoard.finishedBoard[row][column].piece = playerOne.piece;
+        gameBoard.finishedBoard[row][column].piece = getPiece(playerOne.isTurn);
         renderBoard(gameBoard.finishedBoard);
     };
 
@@ -105,8 +131,8 @@ const displayUpdate = (() => {
     const renderBoard = (board) => {
         board.map(sq => {
             sq.map(loc => {
-                const sqUp = document.getElementById(loc.pos)
-                sqUp.innerHTML = loc.piece
+                const sqUp = document.getElementById(loc.pos);
+                sqUp.innerHTML = loc.piece;
             });
         });
     };
