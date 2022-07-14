@@ -92,19 +92,24 @@ const displayUpdate = (() => {
     //get playSquare
     const { playSquare } = gameBoard;
 
-    //strip id from playSquare
+    //strip id from square
     const stripNumber = (squareID) => {
         const string = JSON.stringify(squareID);
         const row = string.slice(1, 2);
         const column = string.slice(3, 4);
-        gameBoard.finishedBoard[row][column] = playerOne.piece;
+        gameBoard.finishedBoard[row][column].piece = playerOne.piece;
         renderBoard(gameBoard.finishedBoard);
     };
 
     //render array into board
     const renderBoard = (board) => {
-        console.log(board);
-    }
+        board.map(sq => {
+            sq.map(loc => {
+                const sqUp = document.getElementById(loc.pos)
+                sqUp.innerHTML = loc.piece
+            });
+        });
+    };
 
     const getBoard = document.querySelectorAll('.square');
     getBoard.forEach(square => {
