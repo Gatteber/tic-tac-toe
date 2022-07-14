@@ -31,16 +31,11 @@
 
 //player factory function
 const player = (name, piece) => {
+
+    //turn tracker
     let isTurn = false;
 
-    //toggle player turns
-    const myTurn = () => {
-        console.log(isTurn);
-        isTurn = !isTurn;
-        // return isTurn;
-    };
-
-   return { name, piece, myTurn, };
+   return { name, piece, isTurn};
 };
 
 //gameBoard module
@@ -54,7 +49,9 @@ const gameBoard = (() => {
             for (let j = 0; j < 3; j++) {
                 array[i][j] = {
                     piece: null,
-                    pos: [i] + "." + [j]
+                    pos: [i] + "." + [j],
+                    X: i,
+                    Y: j,
                 };
             };
         };
@@ -63,29 +60,8 @@ const gameBoard = (() => {
     //create board array
     const finishedBoard = makeGameBoard();
 
-    const playSquare = (clickedSquare) => {
-        if (clickedSquare.innerHTML == "") {
-           return clickedSquare.id
-        };
-    };
-
-    // const getBoard = document.querySelectorAll('.square');
-    // const getEventListeners = getBoard.forEach(square => {
-    //     square.addEventListener("click", () => {
-    //         console.log(square.id);
-    //         playSquare(square);
-    //     });
-    // });
-
-    const add = (a, b) => a + b;
-
     return {
         finishedBoard,
-        // getBoard,
-        // getEventListeners,
-        add,
-        playSquare,
-
     };
 })();
 
@@ -96,27 +72,13 @@ const displayUpdate = (() => {
     const playerOne = player("playerOne", "X");
     const playerTwo = player("playerTwo", "O");
     playerOne.isTurn = true;
-    // playerOne.myTurn(playerOne.isTurn);
-    // console.log(playerOne.isTurn);
-    // playerOne.myTurn(playerOne.isTurn);
-    // console.log(playerOne.isTurn);
-    // playerTwo.myTurn(playerTwo.isTurn);
-
-
 
     //get piece to play
     const getPiece = (p1Turn) => {
-        playerOne.myTurn(playerOne.isTurn);
-        console.log(playerTwo.isTurn);
-        playerTwo.myTurn(playerTwo.isTurn);
+        playerOne.isTurn = !playerOne.isTurn;
         return p1Turn ? playerOne.piece : playerTwo.piece;
     }
 
-
-
-
-    //get playSquare
-    const { playSquare } = gameBoard;
 
     //strip id from square
     const stripNumber = (squareID) => {
@@ -125,6 +87,7 @@ const displayUpdate = (() => {
         const column = string.slice(3, 4);
         gameBoard.finishedBoard[row][column].piece = getPiece(playerOne.isTurn);
         renderBoard(gameBoard.finishedBoard);
+        checkIfWinner(gameBoard.finishedBoard);
     };
 
     //render array into board
@@ -132,7 +95,8 @@ const displayUpdate = (() => {
         board.map(sq => {
             sq.map(loc => {
                 const sqUp = document.getElementById(loc.pos);
-                sqUp.innerHTML = loc.piece;
+                console.log(sqUp.innerHTML);
+                    sqUp.innerHTML = loc.piece;
             });
         });
     };
@@ -140,27 +104,22 @@ const displayUpdate = (() => {
     const getBoard = document.querySelectorAll('.square');
     getBoard.forEach(square => {
         square.addEventListener("click", () => {
-            // console.log(square.id);
-            stripNumber(square.id);
+            if (square.innerHTML == "") {
+                stripNumber(square.id);
+            }
         });
     });
 
-    // console.log(gameBoard.finishedBoard);
-    // console.log(playerOne);
-    // console.log(playerTwo);
-    // console.log(updateBoard())
+    const checkIfWinner = (board) => {
+        board.map(sq => {
+            sq.map(loc => {
+                // console.log(loc.X);
+            });
+        });
+    }
 
-    return { playSquare, }
+
+
+    return {}
 
 })();
-
-
-
-
-
-
-
-
-
-
-

@@ -12,6 +12,13 @@ A Tic-Tac-Toe App!
 4_| _5 |_6
 7 |  8 | 9
 End of Task 1 goals.
+Task 1 complete!
+
+Task 2 goals:
+1.) Add a turn class for each player
+2.) add a variable for piece token (to use in stripNumber)
+3.) switch between the two
+4.) check for a win condition
 
 
 player clicks square -> function to check if played -> update with player if it's their turn
@@ -27,3 +34,32 @@ map into array
 update the screen
 
 render obj, not array inside the obj is the square id
+
+
+playerOne.isTurn = true;
+playerTwo.isTurn = false;
+
+player one = turn
+
+getPiece(p1Turn) => {
+    return (p1Turn ? playerOne.piece : playerTwo.piece)
+    playerOne.myTurn(playerOne.isTurn);
+    playerTwo.myTurn(playerTwo.isTurn);
+}
+
+
+[i][j]
+
+num -> num +=
+if 5
+let count = 0
+const check = () => {
+        const renderBoard = (board) => {
+        board.map(sq => {
+            sq.map(loc => {
+                console.log(loc.piece);
+            });
+        });
+    };
+    
+}
