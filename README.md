@@ -19,6 +19,14 @@ Task 2 goals:
 2.) add a variable for piece token (to use in stripNumber)
 3.) switch between the two
 4.) check for a win condition
+Task 2 complete!
+
+Task 3 goals:
+1.) Decide how to handle the win condition and bugtest.
+2.) if everything is ok, push to git
+3.) Message box on bottom of the screen
+4.) make button to reset game
+5.) CPU? if yes, start with random move.
 
 
 player clicks square -> function to check if played -> update with player if it's their turn
@@ -63,3 +71,6 @@ const check = () => {
     };
     
 }
+
+current situation ->
+winner is checked inside the switchCase() method. Should we bubble up to the checkIfWinner() method?
