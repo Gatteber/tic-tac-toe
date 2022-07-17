@@ -57,50 +57,12 @@ const gameBoard = (() => {
         };
         return array;
     };
-    //create board array
-    const finishedBoard = makeGameBoard();
 
-    return {
-        finishedBoard,
-        makeGameBoard,
-    };
+    return { makeGameBoard };
 })();
 
 //display module
 const displayUpdate = (() => {
-
-    //make players
-    // const playerOne = player("playerOne", "X");
-    // const playerTwo = player("playerTwo", "O");
-    // playerOne.isTurn = true;
-
-    //get piece to play
-    // const getPiece = (p1Turn) => {
-    //     playerOne.isTurn = !playerOne.isTurn;
-    //     return p1Turn ? playerOne.piece : playerTwo.piece;
-    // }
-
-
-    //strip id from square and log turn
-    // let numOfTurns = 0;
-    // const stripNumber = (squareID) => {
-    //     const string = JSON.stringify(squareID);
-    //     const row = string.slice(1, 2);
-    //     const column = string.slice(3, 4);
-    //     gameBoard.finishedBoard[row][column].piece = getPiece(playerOne.isTurn);
-    //     renderBoard(gameBoard.finishedBoard);
-
-    //     if (numOfTurns >= 4 && numOfTurns < 8) {
-    //         if (checkIfWinner(gameBoard.finishedBoard) === true) {
-    //             const winDisplay = document.querySelector('.messagebox');
-    //             winDisplay.innerHTML = playerWinner + " is the winner!";
-    //             console.log(gameBoard.finishedBoard);
-    //         };
-    //     } else if (numOfTurns == 8) {
-    //         console.log("Game over!");
-    //     };
-    //     numOfTurns ++;
-    // };
 
     //render array into board
     const renderBoard = (board) => {
@@ -112,16 +74,7 @@ const displayUpdate = (() => {
         });
     };
 
-    // const getBoard = document.querySelectorAll('.square');
-    // getBoard.forEach(square => {
-    //     square.addEventListener("click", () => {
-    //         if (square.innerHTML == "") {
-    //             stripNumber(square.id);
-    //         }
-    //     });
-    // });
-
-    //win condition counters
+    //win condition
     let count0 = 0;
     let count1 = 0;
     let count2 = 0;
@@ -130,7 +83,6 @@ const displayUpdate = (() => {
     let xArray = [];
     let oArray = [];
 
-    //winner check
     const checkIfWinner = (board) => {
         
         //make separate array for each piece
@@ -155,7 +107,7 @@ const displayUpdate = (() => {
     }
 
     const switchCase = (array) => {
-        count0 = 0;
+        count0 = 0; // reset counters for safety.
         count1 = 0;
         count2 = 0;
         diag1 = 0;
@@ -225,11 +177,7 @@ const displayUpdate = (() => {
         };
     };
 
-    return {
-        renderBoard,
-        checkIfWinner,
-        
-    }
+    return { renderBoard, checkIfWinner }
 
 })();
 
@@ -241,7 +189,7 @@ const game = (() => {
     let finishedBoard = gameBoard.makeGameBoard();
     const playerOne = player("Player One", "X");
     const playerTwo = player("Player Two", "O");
-    // let playerWinner = "";
+    const winDisplay = document.querySelector('.messagebox');
     playerOne.isTurn = true;
 
     const getPiece = (p1Turn) => {
@@ -249,7 +197,6 @@ const game = (() => {
         playerTwo.isTurn = !playerTwo.isTurn;
         return p1Turn ? playerOne.piece : playerTwo.piece;
     };
-
 
     //main gameplay loop
     const playGame = (squareID) => {
@@ -270,8 +217,8 @@ const game = (() => {
             };
 
         } else if (numOfTurns == 8) {
-            const winDisplay = document.querySelector('.messagebox');
             winDisplay.innerHTML = "Tie Game!"
+            resetButton();
         };
         numOfTurns ++;
     };
@@ -286,15 +233,28 @@ const game = (() => {
         });
     });
 
-    //get winner
+    //get winner + cleanup
     const playWinner = (playerName) => {
-        const winDisplay = document.querySelector('.messagebox');
-        winDisplay.innerHTML = playerName + " is the winner!";
+        winDisplay.innerHTML = playerName + " is the winner.";
+        resetButton();
     };
 
-    // const getTurn  = () => {
-    //     console.log(playerOne.isTurn);
-    //     console.log(playerTwo.isTurn);
-    // }
+    const resetButton = () => {
+        const resetB = document.createElement('button');
+        winDisplay.appendChild(resetB);
+        resetB.innerHTML = "Click to play again";
+        resetB.addEventListener("click", () => {
+            resetB.parentNode.removeChild(resetB);
+            winDisplay.innerHTML = "Click to play! Player 1 is X.";
+            resetGame();
+        });
+    };
+
+    const resetGame = () => {
+        numOfTurns = 0;
+        finishedBoard = gameBoard.makeGameBoard();    playerOne.isTurn = true;
+        playerTwo.isTurn = false;
+        displayUpdate.renderBoard(finishedBoard);
+    };
 
 })();
