@@ -35,7 +35,7 @@ const player = (name, piece) => {
     //turn tracker
     let isTurn = false;
 
-   return { name, piece, isTurn};
+   return { name, piece, isTurn };
 };
 
 //gameBoard module
@@ -62,6 +62,7 @@ const gameBoard = (() => {
 
     return {
         finishedBoard,
+        makeGameBoard,
     };
 })();
 
@@ -69,33 +70,37 @@ const gameBoard = (() => {
 const displayUpdate = (() => {
 
     //make players
-    const playerOne = player("playerOne", "X");
-    const playerTwo = player("playerTwo", "O");
-    playerOne.isTurn = true;
+    // const playerOne = player("playerOne", "X");
+    // const playerTwo = player("playerTwo", "O");
+    // playerOne.isTurn = true;
 
     //get piece to play
-    const getPiece = (p1Turn) => {
-        playerOne.isTurn = !playerOne.isTurn;
-        return p1Turn ? playerOne.piece : playerTwo.piece;
-    }
+    // const getPiece = (p1Turn) => {
+    //     playerOne.isTurn = !playerOne.isTurn;
+    //     return p1Turn ? playerOne.piece : playerTwo.piece;
+    // }
 
 
     //strip id from square and log turn
-    let numOfTurns = 0;
-    const stripNumber = (squareID) => {
-        const string = JSON.stringify(squareID);
-        const row = string.slice(1, 2);
-        const column = string.slice(3, 4);
-        gameBoard.finishedBoard[row][column].piece = getPiece(playerOne.isTurn);
-        renderBoard(gameBoard.finishedBoard);
+    // let numOfTurns = 0;
+    // const stripNumber = (squareID) => {
+    //     const string = JSON.stringify(squareID);
+    //     const row = string.slice(1, 2);
+    //     const column = string.slice(3, 4);
+    //     gameBoard.finishedBoard[row][column].piece = getPiece(playerOne.isTurn);
+    //     renderBoard(gameBoard.finishedBoard);
 
-        if (numOfTurns >= 4 && numOfTurns < 8) {
-            checkIfWinner(gameBoard.finishedBoard);
-        } else if (numOfTurns == 8) {
-            console.log("Game over!");
-        };
-        numOfTurns ++;
-    };
+    //     if (numOfTurns >= 4 && numOfTurns < 8) {
+    //         if (checkIfWinner(gameBoard.finishedBoard) === true) {
+    //             const winDisplay = document.querySelector('.messagebox');
+    //             winDisplay.innerHTML = playerWinner + " is the winner!";
+    //             console.log(gameBoard.finishedBoard);
+    //         };
+    //     } else if (numOfTurns == 8) {
+    //         console.log("Game over!");
+    //     };
+    //     numOfTurns ++;
+    // };
 
     //render array into board
     const renderBoard = (board) => {
@@ -107,14 +112,14 @@ const displayUpdate = (() => {
         });
     };
 
-    const getBoard = document.querySelectorAll('.square');
-    getBoard.forEach(square => {
-        square.addEventListener("click", () => {
-            if (square.innerHTML == "") {
-                stripNumber(square.id);
-            }
-        });
-    });
+    // const getBoard = document.querySelectorAll('.square');
+    // getBoard.forEach(square => {
+    //     square.addEventListener("click", () => {
+    //         if (square.innerHTML == "") {
+    //             stripNumber(square.id);
+    //         }
+    //     });
+    // });
 
     //win condition counters
     let count0 = 0;
@@ -131,17 +136,20 @@ const displayUpdate = (() => {
         //make separate array for each piece
         board.map(sq => {
             sq.map(loc => {
-                if (loc.piece == playerOne.piece) {
+                if (loc.piece == "X") {
                     xArray.push(loc);
-                } else if (loc.piece == playerTwo.piece) {
+                } else if (loc.piece == "O") {
                     oArray.push(loc);
                 };
             });
         });
 
-        switchCase(xArray);
-        switchCase(oArray);
-        xArray = [];
+        if (switchCase(xArray) === true) {
+            return true;
+        } else if (switchCase(oArray) === true) {
+            return true;
+        };
+        xArray = []; //reset array for each player.
         oArray = [];
         return false;
     }
@@ -162,7 +170,6 @@ const displayUpdate = (() => {
             n++;
         };
         if (count0 === 3 || count1 === 3 || count2 === 3 || diag1 === 3 || diag2 === 3) {
-            console.log("we have a winner!!!");
             return true;
         };
         n = 0;
@@ -177,7 +184,6 @@ const displayUpdate = (() => {
             n++;
         };
         if (count0 === 3 || count1 === 3 || count2 === 3 || diag1 === 3 || diag2 === 3) {
-            console.log("we have a winner!!!");
             return true;
         };
 
@@ -219,7 +225,76 @@ const displayUpdate = (() => {
         };
     };
 
+    return {
+        renderBoard,
+        checkIfWinner,
+        
+    }
 
-    return {}
+})();
+
+//game module
+const game = (() => {
+
+    //make players, gameboard, and turns
+    let numOfTurns = 0;
+    let finishedBoard = gameBoard.makeGameBoard();
+    const playerOne = player("Player One", "X");
+    const playerTwo = player("Player Two", "O");
+    // let playerWinner = "";
+    playerOne.isTurn = true;
+
+    const getPiece = (p1Turn) => {
+        playerOne.isTurn = !playerOne.isTurn;
+        playerTwo.isTurn = !playerTwo.isTurn;
+        return p1Turn ? playerOne.piece : playerTwo.piece;
+    };
+
+
+    //main gameplay loop
+    const playGame = (squareID) => {
+        const string = JSON.stringify(squareID);
+        const row = string.slice(1, 2);
+        const column = string.slice(3, 4);
+        finishedBoard[row][column].piece = getPiece(playerOne.isTurn);
+        displayUpdate.renderBoard(finishedBoard);
+
+        if (numOfTurns >= 4 && numOfTurns < 8) {
+
+            if (displayUpdate.checkIfWinner(finishedBoard) === true) {
+                if (playerOne.isTurn === false) {
+                    playWinner(playerOne.name);
+                } else {
+                    playWinner(playerTwo.name);
+                };
+            };
+
+        } else if (numOfTurns == 8) {
+            const winDisplay = document.querySelector('.messagebox');
+            winDisplay.innerHTML = "Tie Game!"
+        };
+        numOfTurns ++;
+    };
+
+    //select board
+    const getBoard = document.querySelectorAll('.square');
+    getBoard.forEach(square => {
+        square.addEventListener("click", () => {
+            if (square.innerHTML == "") {
+                playGame(square.id);
+            };
+        });
+    });
+
+    //get winner
+    const playWinner = (playerName) => {
+        const winDisplay = document.querySelector('.messagebox');
+        winDisplay.innerHTML = playerName + " is the winner!";
+    };
+
+    // const getTurn  = () => {
+    //     console.log(playerOne.isTurn);
+    //     console.log(playerTwo.isTurn);
+    // }
 
 })();

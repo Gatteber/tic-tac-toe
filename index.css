@@ -28,4 +28,10 @@ body {
 
 .r {
   border-bottom: 5px solid #d4d4d4;
+}
+
+.messagebox {
+  padding-top: 2rem;
+  font-size: 2rem;
+  color: #d4d4d4;
 }/*# sourceMappingURL=index.css.map */
