@@ -1,34 +1,3 @@
-// function make2DArray (rows, cols) {
-//     let final = [];
-
-//     for (let i = 0; i < rows; i++) {
-//         final[i] = [];
-        
-//         for (let j = 0; j < cols; j++) {
-//             final[i][j] = 0;
-//         }
-//     };
-//     return final
-// };
-
-// let test = make2DArray(3, 3);
-// test[0][1] = "hi";
-// console.log(test);
-
-// function checkForHi () {
-//     for (let i = 0; i < test.length; i++) {
-//         for (let j = 0; j < test[i].length; j++) {
-//             console.log(test[i][j])
-//         };
-//     };
-//     return false;
-// }
-
-// console.log(checkForHi());
-
-
-
-
 //player factory function
 const player = (name, piece) => {
 
@@ -85,7 +54,7 @@ const displayUpdate = (() => {
     
     const checkIfWinner = (board) => {
         
-        //reset arrays each time function runs
+        //reset arrays
         xArray = [];
         oArray = [];
 
@@ -105,8 +74,7 @@ const displayUpdate = (() => {
         } else if (switchCase(oArray) === true) {
             return true;
         };
-        // xArray = []; //reset array for each player.
-        // oArray = [];
+
         return false;
     }
 
@@ -126,7 +94,6 @@ const displayUpdate = (() => {
             n++;
         };
         if (count0 === 3 || count1 === 3 || count2 === 3 || diag1 === 3 || diag2 === 3) {
-            console.log(count0, count1, count2, diag1, diag2)
             return true;
         };
         n = 0;
@@ -143,7 +110,6 @@ const displayUpdate = (() => {
             n++;
         };
         if (count0 === 3 || count1 === 3 || count2 === 3 || diag1 === 3 || diag2 === 3) {
-            console.log(count0, count1, count2, diag1, diag2)
             return true;
         };
 
@@ -195,8 +161,9 @@ const game = (() => {
     //make players, gameboard, and turns
     let numOfTurns = 0;
     let finishedBoard = gameBoard.makeGameBoard();
-    const playerOne = player("Player One", "X");
-    const playerTwo = player("Player Two", "O");
+    let gameOver = false;
+    const playerOne = player("X", "X");
+    const playerTwo = player("O", "O");
     const winDisplay = document.querySelector('.messagebox');
     playerOne.isTurn = true;
 
@@ -213,20 +180,31 @@ const game = (() => {
         const column = string.slice(3, 4);
         finishedBoard[row][column].piece = getPiece(playerOne.isTurn);
         displayUpdate.renderBoard(finishedBoard);
-        if (numOfTurns >= 4 && numOfTurns < 8) {
 
-            if (displayUpdate.checkIfWinner(finishedBoard) === true) {
-                if (playerOne.isTurn === false) {
+        if (numOfTurns >= 4 && numOfTurns < 8 && !gameOver) {
+
+            if (displayUpdate.checkIfWinner(finishedBoard)) {
+                if (!playerOne.isTurn) {
                     playWinner(playerOne.name);
+                    gameOver = true;
                 } else {
                     playWinner(playerTwo.name);
+                    gameOver = true;
                 };
             };
 
         } else if (numOfTurns == 8) {
             winDisplay.innerHTML = "Tie Game!"
+            gameOver = true;
             resetButton();
         };
+
+        setTimeout(() => {
+            if (playerTwo.isTurn && !gameOver) {
+                cpuMinimax.cpuPlay();
+            };
+        }, 300);
+
         numOfTurns ++;
     };
 
@@ -252,16 +230,72 @@ const game = (() => {
         resetB.innerHTML = "Click to play again";
         resetB.addEventListener("click", () => {
             resetB.parentNode.removeChild(resetB);
-            winDisplay.innerHTML = "Click to play! Player 1 is X.";
+            winDisplay.innerHTML = "Click to play! You are X.";
             resetGame();
         });
     };
 
     const resetGame = () => {
-        numOfTurns = 0;
-        finishedBoard = gameBoard.makeGameBoard();    playerOne.isTurn = true;
+        numOfTurns = 0;   
+        finishedBoard.map(row => {
+            row.map(sq => {
+                sq.piece = null;
+            });
+        });
+        playerOne.isTurn = true;
         playerTwo.isTurn = false;
         displayUpdate.renderBoard(finishedBoard);
+        gameOver = false;
     };
 
+    return { finishedBoard, getBoard, playGame }
+
 })();
+
+//dfs minimax attempt, will return to later
+const cpuMinimax = (() => {
+
+
+
+    const cpuPlay = () => {
+
+        let cpuArray = game.finishedBoard;
+        // let cpuSquare = "0.0";
+        // cpu square is a string "row.col"
+        game.playGame(getCpuMove(cpuArray));
+
+    };
+
+    const getCpuMove = (gameboard) => {
+        let cpuMove = "0.0"; //fallback for testing
+        let testArray = [];
+        let gb = game.finishedBoard;
+
+        //check if open space
+        let cpuBoard = gameboard;
+        cpuBoard.map(row => {
+            row.map(sq => {
+                if (sq.piece === null) {
+                    // console.log(sq);
+                    testMiniMax(gb, 0, false);
+                    cpuMove = sq.pos;
+                    testArray.push(sq);
+
+                }
+            })
+        });
+
+        // console.log(testArray);
+
+        cpuBoard = game.finishedBoard;
+        return cpuMove;
+    }
+
+    const testMiniMax = (board, depth, isMaxing) => {
+        return 1;
+    }
+
+    return { cpuPlay, }
+
+}
+)();

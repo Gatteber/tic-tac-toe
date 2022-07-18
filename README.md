@@ -29,6 +29,18 @@ Task 3 goals:
 5.) CPU? if yes, start with random move.
 
 
+### Reflection
+I've decided to stop here for now. While I understand the concept of minimax and how it works, I'm not sure how to implement it in a way that makes sense for my current level of skill. I'm struggling the most on how to link the score evaluation to a gameboard. I've got some understanding of dfs, but I'm really, really stuck on where to even start, and while I watched some videos of people coding it themselves, I wasn't able to wrap my head around how to get the score evaluation and what to do in each situation.
+
+On the other hand, I was really proud that I accomplished this without any global code. I think a couple of my functions are kind of large, but I could finish almost everything I wanted. I got the switch cases idea from a friend, although I could have just used if cases, it was nice to learn what they were and how to apply them a little.
+
+I'm also more comfortable with the functions I struggled with during the library project. I think I'm slowly starting to understand what it is that I need to do in code.
+
+I will, without a doubt, come back to this and finish the minimax algorithm implementation when I've had some time away from the project. When I do, I look forward to making an unbeatable AI.
+
+
+### Project Notes
+
 player clicks square -> function to check if played -> update with player if it's their turn
 
 click -> checkifturn (player) -> playPiece -> changeturn
