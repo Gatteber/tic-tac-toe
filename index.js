@@ -82,9 +82,13 @@ const displayUpdate = (() => {
     let diag2 = 0;
     let xArray = [];
     let oArray = [];
-
+    
     const checkIfWinner = (board) => {
         
+        //reset arrays each time function runs
+        xArray = [];
+        oArray = [];
+
         //make separate array for each piece
         board.map(sq => {
             sq.map(loc => {
@@ -101,8 +105,8 @@ const displayUpdate = (() => {
         } else if (switchCase(oArray) === true) {
             return true;
         };
-        xArray = []; //reset array for each player.
-        oArray = [];
+        // xArray = []; //reset array for each player.
+        // oArray = [];
         return false;
     }
 
@@ -122,12 +126,15 @@ const displayUpdate = (() => {
             n++;
         };
         if (count0 === 3 || count1 === 3 || count2 === 3 || diag1 === 3 || diag2 === 3) {
+            console.log(count0, count1, count2, diag1, diag2)
             return true;
         };
         n = 0;
-        count0 = 0;
+        count0 = 0;  //reset again to count y
         count1 = 0;
         count2 = 0;
+        diag1 = 0;
+        diag2 = 0;
 
         //check y pos
         while (n < array.length) {
@@ -136,6 +143,7 @@ const displayUpdate = (() => {
             n++;
         };
         if (count0 === 3 || count1 === 3 || count2 === 3 || diag1 === 3 || diag2 === 3) {
+            console.log(count0, count1, count2, diag1, diag2)
             return true;
         };
 
@@ -177,7 +185,7 @@ const displayUpdate = (() => {
         };
     };
 
-    return { renderBoard, checkIfWinner }
+    return { renderBoard, checkIfWinner, }
 
 })();
 
@@ -205,7 +213,6 @@ const game = (() => {
         const column = string.slice(3, 4);
         finishedBoard[row][column].piece = getPiece(playerOne.isTurn);
         displayUpdate.renderBoard(finishedBoard);
-
         if (numOfTurns >= 4 && numOfTurns < 8) {
 
             if (displayUpdate.checkIfWinner(finishedBoard) === true) {
